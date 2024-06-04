@@ -1,33 +1,99 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Select from "react-select"
+import { states } from "./data/states";
+import { useRef, useState } from "react";
+import DatePicker from "react-date-picker";
+import 'react-date-picker/dist/DatePicker.css';
+import 'react-calendar/dist/Calendar.css';
+import ModalText from "./components/react-modal-text/react-modal-text";
+import { Link } from "react-router-dom";
+
 
 function App() {
-  const [count, setCount] = useState(0)
+  const firstNameRef = useRef(null);
+  const lastNameRef = useRef(null);
+  const departmentRef = useRef(null);
+  const streetRef = useRef(null);
+  const cityRef = useRef(null);
+  const stateRef = useRef(null);
+  const zipCodeRef = useRef(null);
+
+  const [dateOfBirth, setDateOfBirth] = useState(new Date());
+  const [startDate, setStartDate] = useState(new Date());
+  const [saveModalVisible, setSaveModalVisible] = useState(false);
+
+  const closeModal = () => setSaveModalVisible(false);
+
+  const departements = [
+    { value: 'Sales', label: 'Sales' },
+    { value: 'Marketing', label: 'Marketing' },
+    { value: 'Engineering', label: 'Engineering' },
+    { value: 'Human Resources', label: 'Human Resources' },
+    { value: 'Legal', label: 'Legal' }
+  ]
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    const employees = JSON.parse(localStorage.getItem('employees')) || [];
+    const employee = {
+      firstName: firstNameRef.current.value,
+      lastName: lastNameRef.current.value,
+      dateOfBirth: dateOfBirth,
+      startDate: startDate,
+      department: departmentRef.current.value,
+      street: streetRef.current.value,
+      city: cityRef.current.value,
+      state: stateRef.current.value,
+      zipCode: zipCodeRef.current.value
+    };
+    employees.push(employee);
+    localStorage.setItem('employees', JSON.stringify(employees));
+    setSaveModalVisible(true);
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <div className="flex items-center justify-center">
+      <h1>HRnet</h1>
+    </div>
+    <div className="flex flex-col items-center justify-center">
+      <Link to="employee-list">View Current Employees</Link>
+      <h2>Create Employee</h2>
+      <form>
+          <label htmlFor="first-name">First Name</label>
+          <input className="ring-1 ring-black p-0.5 text-xs" type="text" ref={firstNameRef} />
+
+          <label htmlFor="last-name">Last Name</label>
+          <input className="ring-1 ring-black p-0.5 text-xs" type="text" ref={lastNameRef} />
+
+          <label htmlFor="date-of-birth">Date of Birth</label>
+          <DatePicker onChange={setDateOfBirth} value={dateOfBirth}></DatePicker>
+
+          <label htmlFor="start-date">Start Date</label>
+          <DatePicker onChange={setStartDate} value={startDate}></DatePicker>
+
+          <fieldset className="mt-[10px] mx-0.5 p-3 border-2 border-gray-500">
+              <legend>Address</legend>
+
+              <label htmlFor="street">Street</label>
+              <input className="ring-1 ring-black p-0.5 text-xs" ref={streetRef} type="text" />
+
+              <label htmlFor="city">City</label>
+              <input className="ring-1 ring-black p-0.5 text-xs" ref={cityRef} type="text" />
+
+              <label htmlFor="state">State</label>
+              <Select name="state" ref={stateRef} options={states} defaultValue={states[0]}></Select>
+
+              <label htmlFor="zip-code">Zip Code</label>
+              <input className="ring-1 ring-black p-0.5 text-xs" ref={zipCodeRef} type="number" />
+          </fieldset>
+
+          <label htmlFor="department">Department</label>
+          <Select name="department" ref={departmentRef} options={departements} defaultValue={departements[0]}></Select>
+      </form>
+      <button className="bg-gray-300 border border-black px-2 mt-5 hover:bg-sky-200 active:bg-sky-300" onClick={handleSubmit}>Save</button>
+      <ModalText text="Employee Created !" isVisible={saveModalVisible} closeModalFunction={closeModal}></ModalText>
+    </div>
     </>
   )
 }
