@@ -1,24 +1,28 @@
 import { useEffect, useRef } from "react";
 import "./react-modal-text.css";
 
-function ModalText ({text, isVisible, closeModalFunction}) {
+function ModalText ({buttonName, text, onOpen, onClose}) {
     const dialogRef = useRef();
 
-    useEffect(() => {
-        if (isVisible) {
-            dialogRef.current.showModal();
-        } else {
-            dialogRef.current.close();
-        }
-    }, [isVisible]);
+    const openModal = () => {
+        dialogRef.current.showModal();
+        onOpen && onOpen();
+    }
+    const closeModal = () => {
+        dialogRef.current.close();
+        onClose && onClose();
+    }
 
     return (
-        <dialog ref={dialogRef} className="modal-dialog">
-            <p className="modal-text">{text}</p>
-            <div className="modal-close-button" onClick={closeModalFunction}>
-                <span className="modal-close-cross" onClick={closeModalFunction} />
-            </div>
-        </dialog>
+        <>
+            <button className="modal-button" onClick={openModal}>{buttonName}</button>
+            <dialog className="modal-dialog" ref={dialogRef}>
+                <p className="modal-text">{text}</p>
+                <div className="modal-close-button" onClick={closeModal}>
+                    <span className="modal-close-cross"/>
+                </div>
+            </dialog>
+        </>
     )
 }
 

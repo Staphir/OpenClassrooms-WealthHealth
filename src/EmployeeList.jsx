@@ -15,26 +15,6 @@ function EmployeeList () {
         { name: 'Zip Code', selector: row => row.zipCode, sortable: true, },
     ];
 
-    const conditionalRowStyles = [
-        // {
-        //     // when: row => row.index % 2 === 0,
-        //     when: row => row.firstname === 'oui',
-        //     style: {
-        //     backgroundColor: 'rgba(63, 195, 128, 0.9)',
-        //     },
-        // },
-        {
-            when: row => row.row == 'row-0',
-            style: {
-                backgroundColor: 'rgba(63, 195, 128, 0.9)',
-                color: 'white',
-                '&:hover': {
-                    cursor: 'pointer',
-                },
-            },
-        },
-    ];
-
     return (
         <div id="employee-div" className="flex flex-col items-center justify-center">
             <h1>Current Employees</h1>

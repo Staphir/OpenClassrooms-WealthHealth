@@ -1,4 +1,18 @@
-dialog {
+.modal-button {
+  background-color: #d1d5db;
+  border: black solid 1px;
+  padding: 0 8px 0 8px;
+}
+
+.modal-button:hover {
+  background-color: #bae6fd;
+}
+
+.modal-button:active {
+  background-color: #7dd3fc;
+}
+
+.modal-dialog {
     border: none;
     border-radius: 10px;
     box-shadow: 0 0 5px 2px black;

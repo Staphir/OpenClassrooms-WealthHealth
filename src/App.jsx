@@ -19,9 +19,6 @@ function App() {
 
   const [dateOfBirth, setDateOfBirth] = useState(new Date());
   const [startDate, setStartDate] = useState(new Date());
-  const [saveModalVisible, setSaveModalVisible] = useState(false);
-
-  const closeModal = () => setSaveModalVisible(false);
 
   const departements = [
     { value: 'Sales', label: 'Sales' },
@@ -32,7 +29,6 @@ function App() {
   ]
 
   function handleSubmit(e) {
-    e.preventDefault();
 
     const employees = JSON.parse(localStorage.getItem('employees')) || [];
     const employee = {
@@ -40,15 +36,14 @@ function App() {
       lastName: lastNameRef.current.value,
       dateOfBirth: dateOfBirth,
       startDate: startDate,
-      department: departmentRef.current.value,
+      department: departmentRef.current.getValue()[0].value,
       street: streetRef.current.value,
       city: cityRef.current.value,
-      state: stateRef.current.value,
+      state: stateRef.current.getValue()[0].value,
       zipCode: zipCodeRef.current.value
     };
     employees.push(employee);
     localStorage.setItem('employees', JSON.stringify(employees));
-    setSaveModalVisible(true);
   }
 
   return (
@@ -89,10 +84,9 @@ function App() {
           </fieldset>
 
           <label htmlFor="department">Department</label>
-          <Select name="department" ref={departmentRef} options={departements} defaultValue={departements[0]}></Select>
+          <Select className="mb-5" name="department" ref={departmentRef} options={departements} defaultValue={departements[0]}></Select>
       </form>
-      <button className="bg-gray-300 border border-black px-2 mt-5 hover:bg-sky-200 active:bg-sky-300" onClick={handleSubmit}>Save</button>
-      <ModalText text="Employee Created !" isVisible={saveModalVisible} closeModalFunction={closeModal}></ModalText>
+        <ModalText buttonName='Save' text="Employee Created !" onOpen={handleSubmit}></ModalText>
     </div>
     </>
   )
