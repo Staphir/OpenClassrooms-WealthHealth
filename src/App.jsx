@@ -4,8 +4,9 @@ import { useRef, useState } from "react";
 import DatePicker from "react-date-picker";
 import 'react-date-picker/dist/DatePicker.css';
 import 'react-calendar/dist/Calendar.css';
-import ModalText from "./components/react-modal-text/react-modal-text";
 import { Link } from "react-router-dom";
+import { ModalText } from "react-modal-text";
+import 'react-modal-text/dist/style.css';
 
 
 function App() {
